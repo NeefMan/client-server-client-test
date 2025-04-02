@@ -9,6 +9,6 @@ s = socket.socket()
 port = 5000             
  
 # connect to the server on local computer 
-s.connect(('13.58.174.226', port)) 
+s.connect(('3.145.28.18', port)) 
 
 s.sendall("kill".encode())

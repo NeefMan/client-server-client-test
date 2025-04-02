@@ -25,6 +25,7 @@ while True:
     data = c.recv(1024).decode()
     if data == "kill":
         s.close()
+        sys.exit()
     
     data = data.split(delimeter) # [username, connect_to_username, message]
     if len(data):
