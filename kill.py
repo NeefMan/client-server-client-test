@@ -1,5 +1,4 @@
 import socket
-
 # Import socket module 
 import socket             
  
