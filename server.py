@@ -1,12 +1,13 @@
 import socket
 import json
 import time
+import sys
 
 s = socket.socket()
 
 port = 5000
 
-s.bind(('', port))
+s.bind(('0.0.0.0', port))
 
 s.listen(5)
 
@@ -21,7 +22,11 @@ while True:
 
     delimeter = "$"
 
-    data = c.recv(1024).decode().split(delimeter) # [username, connect_to_username, message]
+    data = c.recv(1024).decode()
+    if data == "kill":
+        s.close()
+    
+    data = data.split(delimeter) # [username, connect_to_username, message]
     if len(data):
         username = data[0]
         users[username] = (ip, port, c)
