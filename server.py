@@ -42,6 +42,7 @@ while True:
     for task in task_queue:
         timestamp, from_user, to_user, message = task
         if time.time() - timestamp > 10:
+            print(from_user, to_user, message, "Max buffer limit exceeded")
             continue
         if not from_user in users or not to_user in users:
             temp.append(task) # If the task cannot be completed for the above reasons, retry next time
