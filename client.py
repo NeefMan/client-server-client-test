@@ -8,7 +8,7 @@ s = socket.socket()
 port = 5000             
  
 # connect to the server on local computer 
-s.connect(('3.145.28.18', port)) 
+s.connect(('3.136.151.92', port)) 
 
 s.sendall("user1$user2$This is a message Sigma Balls".encode())
 
