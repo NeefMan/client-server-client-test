@@ -31,7 +31,6 @@ while True:
     if len(data):
         username = data[0]
         users[username] = (ip, port, c)
-        users["user2"] = (ip, port, c)
     if len(data) >= 2:
         connect_to_username = data[1]
     if len(data) >= 3:
