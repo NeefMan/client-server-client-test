@@ -1,5 +1,6 @@
 # Import socket module 
-import socket             
+import socket        
+import sys     
  
 # Create a socket object 
 s = socket.socket()         
@@ -8,17 +9,23 @@ s = socket.socket()
 port = 5000             
  
 # connect to the server on local computer 
-s.connect(('18.218.245.80', port)) 
+s.connect(('18.218.245.80', port))
 
-s.sendall("user2$user1$This is a message Sigma Balls".encode())
-
-try:
-    done = False
-    while not done:
-        packet = s.recv(1024).decode('utf-8', 'ignore')  # Ignores invalid characters
-        print(packet)
-        if packet == '':
-            done = True
-            break
-except socket.error as e:
-    print(f"Socket error: {e}")
+username = input("What is your username?")
+while True:
+    task = input("Would you like to send a message? (sm) Or view your inbox? (vi) Or exit? (q)")
+    if task == "q":
+        sys.exit()
+    elif task == "vi":
+        done = False
+        while not done:
+            packet = s.recv(1024).decode('utf-8', 'ignore')  # Ignores invalid characters
+            print(packet)
+            if packet == '':
+                done = True
+                break
+    elif task == "sm":
+        to_user = input("Who would you like to send it to?")
+        message = input("What is the message?")
+        delimeter = "$"
+        s.sendall(f"{username}{delimeter}{to_user}{delimeter}{message}")
