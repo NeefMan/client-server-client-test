@@ -10,7 +10,7 @@ port = 5000
 # connect to the server on local computer 
 s.connect(('18.218.245.80', port)) 
 
-s.sendall("user1$user2$This is a message Sigma Balls".encode())
+s.sendall("user2$user1$This is a message Sigma Balls".encode())
 
 try:
     done = False

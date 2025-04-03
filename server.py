@@ -41,7 +41,9 @@ while True:
     task_max_buffer_time = 10
     for task in task_queue:
         timestamp, from_user, to_user, message = task
-        if time.time() - timestamp < 10 and (not from_user in users or not to_user in users):
+        if time.time() - timestamp > 10:
+            continue
+        if not from_user in users or not to_user in users:
             temp.append(task) # If the task cannot be completed for the above reasons, retry next time
             continue
         unused, unused, c = users[to_user]
