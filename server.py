@@ -27,16 +27,6 @@ def collect_data(c):
 def process_message(from_user, to_user, message):
     users[to_user].append(f"From {from_user}: {message}")
 
-def send_messages(c, user):
-    messages = users[user]
-    if len(messages)>=1:
-        print("There are messages")
-        c.sendall("$".join(messages).encode())
-    else:
-        print("empty inbox")
-        c.sendall("No messages".encode())
-
-
 def kill(c):
     c.close()
     s.close()
@@ -58,7 +48,13 @@ while True:
 
     if len(data) >= 2:
         if data[1] == "vi":
-            send_messages(c, username)
+            messages = users[username]
+            if len(messages)>=1:
+                print("There are messages")
+                c.sendall("$".join(messages).encode())
+            else:
+                print("empty inbox")
+                c.sendall("No messages".encode())
         elif data[1] == "sm":
             to_user = data[2]
             if to_user not in users:
