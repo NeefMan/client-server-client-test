@@ -16,6 +16,7 @@ while True:
     s.settimeout(2) 
     task = input("Would you like to send a message? (sm) Or view your inbox? (vi) Or exit? (q)")
     if task == "q":
+        s.close()
         sys.exit()
     elif task == "vi":
         s.connect(('18.218.245.80', port))
@@ -34,7 +35,7 @@ while True:
                 done = True  # Break cleanly on timeout
         data = "".join(data)
         for message in data.split("$"):
-            print("message")
+            print(message)
     elif task == "sm":
         to_user = input("Who would you like to send it to?")
         message = input("What is the message?")
