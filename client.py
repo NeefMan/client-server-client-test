@@ -5,7 +5,8 @@ import sys
 # Create a socket object 
  
 # Define the port on which you want to connect 
-port = 5000             
+port = 5000     
+delimeter = "$"        
  
 # connect to the server on local computer 
 
@@ -34,7 +35,6 @@ while True:
     elif task == "sm":
         to_user = input("Who would you like to send it to?")
         message = input("What is the message?")
-        delimeter = "$"
         s.connect(('18.218.245.80', port))
         s.sendall(f"{username}{delimeter}sm{delimeter}{to_user}{delimeter}{message}".encode())
         s.close()
