@@ -29,9 +29,11 @@ def process_message(from_user, to_user, message):
 
 def send_messages(c, user):
     messages = users[user]
-    if messages:
+    if len(messages)>=1:
+        print("There are messages")
         c.sendall("$".join(messages).encode())
     else:
+        print("empty inbox")
         c.sendall("No messages".encode())
 
 
