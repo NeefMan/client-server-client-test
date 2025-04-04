@@ -21,17 +21,17 @@ while True:
         s.connect(('18.218.245.80', port))
         s.sendall(f"{username}{delimeter}vi".encode())
         done = False
+        data = []
         while not done:
-            data = []
             packet = s.recv(1024).decode('utf-8', 'ignore')  # Ignores invalid characters
             data.append(packet)
             if not packet:
                 done = True
                 s.close()
                 break
-            data = "".join(data)
-            for message in data.split("$"):
-                print("message")
+        data = "".join(data)
+        for message in data.split("$"):
+            print("message")
     elif task == "sm":
         to_user = input("Who would you like to send it to?")
         message = input("What is the message?")
