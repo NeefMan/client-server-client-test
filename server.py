@@ -29,11 +29,11 @@ def process_message(from_user, to_user, message):
 
 def send_messages(c, user):
     messages = users[user]
-    if not messages:
-        message = "Inbox Empty"
+    if messages:
+        c.sendall("$".join(messages).encode())
     else:
-        message = messages
-    c.sendall("$".join(message).encode())
+        c.sendall("No messages".encode())
+
 
 def kill(c):
     c.close()
