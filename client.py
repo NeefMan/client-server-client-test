@@ -35,7 +35,7 @@ while True:
                 done = True  # Break cleanly on timeout
 
         s.close()
-        
+        print(data)
         print("".join(data))
     elif task == "sm":
         to_user = input("Who would you like to send it to?")
