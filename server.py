@@ -47,6 +47,7 @@ while True:
     print(f"Connection from: {addr}")
 
     data = collect_data(c).split("$")
+    print(data)
 
     if len(data) >= 1:
         if data[0] == "kill":
