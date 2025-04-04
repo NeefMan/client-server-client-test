@@ -20,15 +20,18 @@ while True:
     elif task == "vi":
         s.connect(('18.218.245.80', port))
         s.sendall(f"{username}{delimeter}vi".encode())
+        
+        data = []  # Moved here
         done = False
-        data = []
         while not done:
-            packet = s.recv(1024).decode('utf-8', 'ignore')  # Ignores invalid characters
-            data.append(packet)
-            if not packet:
-                done = True
-                s.close()
-                break
+            try:
+                packet = s.recv(1024).decode('utf-8', 'ignore')
+                if not packet:
+                    done = True
+                    break
+                data.append(packet)
+            except socket.timeout:
+                done = True  # Break cleanly on timeout
         data = "".join(data)
         for message in data.split("$"):
             print("message")
