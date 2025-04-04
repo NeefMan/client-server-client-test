@@ -33,9 +33,17 @@ while True:
                 data.append(packet)
             except socket.timeout:
                 done = True  # Break cleanly on timeout
-        data = "".join(data)
-        for message in data.split("$"):
-            print(message)
+
+        s.close()
+        
+        full_data = "".join(data).strip()
+        print("\n--- Inbox ---")
+        if full_data == "No messages":
+            print("No messages.")
+        else:
+            for message in full_data.split("$"):
+                print(message)
+        print("-------------\n")
     elif task == "sm":
         to_user = input("Who would you like to send it to?")
         message = input("What is the message?")
