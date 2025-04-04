@@ -1,9 +1,9 @@
 import socket
-import json
-import time
 import sys
+from collections import defaultdict
 
 s = socket.socket()
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 port = 5000
 
@@ -11,43 +11,51 @@ s.bind(('0.0.0.0', port))
 
 s.listen(5)
 
-users = {} # [username] = (ip, port, c_socket)
+users = defaultdict(list) # {"username": inbox["message1", "message2"]}
 
-task_queue = [] # timestamp, from_user, to_user, message
+def collect_data(c):
+    data = []
+    done = False
+    while not done:
+        packet = c.recv(1024).decode('utf-8', 'ignore')  # Ignores invalid characters
+        data.append(packet)
+        if not packet:
+            done = True
+            print("All packets have been recieved")
+    return "".join(data)
+
+def process_message(from_user, to_user, message):
+    users[to_user].append(f"From {from_user}: {message}")
+
+def send_messages(c, user):
+    c.sendall("$".join(users[user]).encode())
+
+def kill(c):
+    c.close()
+    s.close()
+    sys.exit()
 
 while True:
     c, addr = s.accept()
-    ip, port = addr
-    print(f"connection from {addr}")
+    print(f"Connection from: {addr}")
 
-    delimeter = "$"
+    data = collect_data(c).split("$")
 
-    data = c.recv(1024).decode()
-    if data == "kill":
-        s.close()
-        sys.exit()
-    
-    data = data.split(delimeter) # [username, connect_to_username, message]
-    if len(data):
+    if len(data) >= 1:
+        if data[0] == "kill":
+            kill(c)
         username = data[0]
-        users[username] = (ip, port, c)
-    if len(data) >= 2:
-        connect_to_username = data[1]
-    if len(data) >= 3:
-        message = data[2]
-        task_queue.append((time.time(), username, connect_to_username, message))
-    
-    temp = []
-    task_max_buffer_time = 10
-    for task in task_queue:
-        timestamp, from_user, to_user, message = task
-        if time.time() - timestamp > 10:
-            print(from_user, to_user, message, "Max buffer limit exceeded")
-            continue
-        if not from_user in users or not to_user in users:
-            temp.append(task) # If the task cannot be completed for the above reasons, retry next time
-            continue
-        unused, unused, c = users[to_user]
+        if username not in users:
+            users[username] = []
 
-        c.sendall(f"{from_user}{delimeter}{message}".encode())
-    task_queue = temp
+    if len(data) >= 2:
+        if data[1] == "vi":
+            send_messages(c, username)
+        elif data[1] == "sm":
+            to_user = data[2]
+            if to_user not in users:
+                c.sendall(f"The message could not be sent because the recipient, {to_user}, does not exist".encode())
+            else:
+                process_message(username, to_user, data[3])
+    
+    c.close()
