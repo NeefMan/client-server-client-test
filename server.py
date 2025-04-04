@@ -28,7 +28,12 @@ def process_message(from_user, to_user, message):
     users[to_user].append(f"From {from_user}: {message}")
 
 def send_messages(c, user):
-    c.sendall("$".join(users[user]).encode())
+    messages = users[user]
+    if not messages:
+        message = "Inbox Empty"
+    else:
+        message = messages
+    c.sendall("$".join(message).encode())
 
 def kill(c):
     c.close()
